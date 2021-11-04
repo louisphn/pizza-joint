@@ -10,7 +10,7 @@ const Pizza: NextPage = () => {
   const { pizza } = router.query;
 
   return (
-    <Layout pageTitle={(getAsString(pizza) as string).toUpperCase()}>
+    <Layout pageTitle={getAsString(pizza)}>
       <SelectPizza />
     </Layout>
   );
