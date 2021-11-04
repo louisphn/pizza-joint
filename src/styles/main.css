@@ -3,6 +3,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=BioRhyme&display=swap");
+
 @tailwind base;
 
 a {
@@ -152,12 +153,6 @@ header .pizza-svg,
   margin-bottom: 30px;
 }
 
-.home.container,
-.order.container {
-  text-align: center;
-  /* max-width: 800px; */
-}
-
 .home button {
   color: #0d0d0d;
   padding: 15px 30px;
@@ -192,7 +187,7 @@ header .pizza-svg,
   padding: 24px;
   align-items: center;
   width: 320px;
-  height: 320px;
+  height: 380px;
   background: #fff;
 }
 
@@ -242,7 +237,7 @@ header .pizza-svg,
   position: relative;
   overflow: hidden;
   width: 112px;
-  height: 42px;
+  height: 48px;
   margin-top: 24px;
 }
 
@@ -283,9 +278,8 @@ header .pizza-svg,
   align-items: center;
   padding-top: 48px;
   width: 100vw;
-  height: 100vh;
-  /* background: #fbdd74; */
   background: #fde24f;
+  padding-top: 148px;
 }
 
 .hero h2 {
@@ -336,10 +330,6 @@ header .pizza-svg,
   left: -140px;
   transition: all 0.3s ease-in;
 }
-
-/* .cta button:hover {
-  color: #fff;
-} */
 
 .cta button:hover::before {
   width: 480px;
@@ -550,4 +540,8 @@ li {
 .order button {
   color: #fff;
   border: 1px solid #fff;
+}
+
+.scroll-snap {
+  scroll-snap-type: y mandatory;
 }

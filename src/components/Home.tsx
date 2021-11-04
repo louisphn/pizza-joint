@@ -14,7 +14,6 @@ const Home: FC = () => {
       variants={homeVariants}
       initial="hidden"
       animate="visible"
-      exit="exit"
     >
       <Hero />
       <div className="about">

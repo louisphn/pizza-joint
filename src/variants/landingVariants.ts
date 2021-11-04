@@ -6,5 +6,8 @@ export const section = {
   visible: {
     y: -56,
     opacity: 1,
+    transition: {
+      ease: 'easeInOut',
+    },
   },
 };
