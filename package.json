@@ -14,10 +14,13 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "framer-motion": "^4.1.17",
     "next": "^12.0.0",
     "next-seo": "^4.28.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
+    "react-intersection-observer": "^8.32.2",
     "styled-jsx-plugin-postcss": "^4.0.1"
   },
   "devDependencies": {
