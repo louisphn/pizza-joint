@@ -5,6 +5,7 @@ import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 
 import { modalContext } from '../contexts/modalContext';
+import { initialState, pizzaAtom } from '../contexts/pizzaContext';
 
 const backdrop = {
   hidden: {
@@ -57,6 +58,7 @@ const buttonClose = {
 
 const Modal: VFC = () => {
   const router = useRouter();
+  const [, setSelectedPizza] = useAtom(pizzaAtom);
   const [showModal, setShowModal] = useAtom(modalContext);
 
   return (
@@ -81,7 +83,10 @@ const Modal: VFC = () => {
               variants={buttonBack}
               initial="hidden"
               whileHover="hover"
-              onClick={() => router.push('/')}
+              onClick={() => {
+                setSelectedPizza(initialState);
+                router.push('/');
+              }}
             >
               Back to homepage
             </motion.button>

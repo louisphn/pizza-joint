@@ -54,7 +54,7 @@ const Toppings: FC = () => {
       exit="exit"
     >
       <motion.div
-        onClick={() => router.push('/base')}
+        onClick={() => router.push('/')}
         variants={backVariants}
         whileHover="hover"
         className="back"
@@ -62,9 +62,7 @@ const Toppings: FC = () => {
         <motion.div variants={arrowVariants}>
           <FaArrowLeft />
         </motion.div>
-        <motion.p variants={backVariants}>
-          Back to selecting pizza base
-        </motion.p>
+        <motion.p variants={backVariants}>Back to selecting base</motion.p>
       </motion.div>
       <h3>Step 2: Choose Toppings</h3>
       <ul>

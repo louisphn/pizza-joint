@@ -1,17 +1,21 @@
 import React, { VFC, useState } from 'react';
 
+import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
+import toast, { Toaster } from 'react-hot-toast';
+import { FaArrowLeft } from 'react-icons/fa';
 
-import { modalContext } from '../contexts/modalContext';
 import { pizzaAtom } from '../contexts/pizzaContext';
 import { fetchPostJSON } from '../lib/helper';
 import getStripe from '../utils/get-stripejs';
+import { backVariants, arrowVariants } from '../variants/variants';
 import Loading from './Loading';
 
 const Order: VFC = () => {
+  const router = useRouter();
   const [selectedPizza] = useAtom(pizzaAtom);
   const [isLoading, setIsLoading] = useState(false);
-  const [, setShowModal] = useAtom(modalContext);
 
   const baseTotal = selectedPizza.base.price;
   const toppingsPrice = selectedPizza.toppings.map((topping) => topping.price);
@@ -21,7 +25,10 @@ const Order: VFC = () => {
   );
   const total = baseTotal + toppingsTotal;
 
-  const handleSubmit = async (e) => {
+  const notify = () =>
+    toast.error('Oops! Something went wrong. Please try again in a moment.');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     // Create a Checkout Session.
@@ -31,6 +38,8 @@ const Order: VFC = () => {
 
     if (response.statusCode === 500) {
       console.error(response.message);
+      notify();
+      setIsLoading(false);
       return;
     }
 
@@ -47,12 +56,27 @@ const Order: VFC = () => {
     // error, display the localized error message to your customer
     // using `error.message`.
     console.warn(error.message);
+    notify();
   };
 
   return (
     <>
       <Loading {...{ isLoading }} />
+      <Toaster />
       <form className="order" onSubmit={(e) => handleSubmit(e)} method="POST">
+        <motion.div
+          onClick={() => router.push('/toppings')}
+          variants={backVariants}
+          whileHover="hover"
+          className="back"
+        >
+          <motion.div variants={arrowVariants}>
+            <FaArrowLeft />
+          </motion.div>
+          <motion.p variants={backVariants}>
+            Back to selecting pizza toppings
+          </motion.p>
+        </motion.div>
         <div>
           <p>
             You have ordered a {selectedPizza.base.item} pizza with toppings:
@@ -66,9 +90,6 @@ const Order: VFC = () => {
           <p>Total: ¥{total}</p>
         </div>
         <button type="submit">Check out</button>
-        <button type="button" onClick={() => setShowModal(true)}>
-          Order one more pizza
-        </button>
       </form>
     </>
   );

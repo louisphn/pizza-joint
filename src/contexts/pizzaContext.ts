@@ -1,6 +1,17 @@
 import { atomWithStorage } from 'jotai/utils';
 
-const initialState = {
+type Pizza = {
+  base: {
+    item: string;
+    price: number;
+  };
+  toppings: {
+    item: string;
+    price: number;
+  }[];
+};
+
+export const initialState: Pizza = {
   base: {
     item: '',
     price: 0,
@@ -13,4 +24,4 @@ const initialState = {
   ],
 };
 
-export const pizzaAtom = atomWithStorage('selectedPizza', initialState);
+export const pizzaAtom = atomWithStorage<Pizza>('selectedPizza', initialState);

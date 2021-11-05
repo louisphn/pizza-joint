@@ -1,9 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2020-08-27',
-});
+// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+//   apiVersion: '2020-08-27',
+// });
+
+const stripe = new Stripe(
+  'sk_test_51JryuPFpzUOxECRMcVqrkJOhk3sZfnGXjBJr6CVmOlxZ7PJwSNW1Nxd0WpU6DFweJlGKLmMEyiOlPT0KgLswbWYR00fxHQPs3i',
+  {
+    apiVersion: '2020-08-27',
+  }
+);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
