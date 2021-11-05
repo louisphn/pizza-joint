@@ -46,12 +46,7 @@ const Order: VFC = () => {
   };
 
   return (
-    <form
-      className="order"
-      style={{ marginTop: '88px' }}
-      onSubmit={(e) => handleSubmit(e)}
-      method="POST"
-    >
+    <form className="order" onSubmit={(e) => handleSubmit(e)} method="POST">
       <div>
         <p>You have ordered a {selectedPizza.base.item} pizza with toppings:</p>
         <ul>
