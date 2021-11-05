@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC, useCallback } from 'react';
 
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
@@ -23,24 +23,27 @@ const Toppings: FC = () => {
 
   const [selectedPizza, setSelectedPizza] = useAtom(pizzaAtom);
 
-  const addTopping = (topping: { item: string; price: number }) => {
-    let newToppings;
-    if (
-      selectedPizza.toppings.filter((data) => data.item === topping.item)
-        .length === 0
-    ) {
-      if (selectedPizza.toppings[0]?.item === '') {
-        newToppings = [topping];
+  const addTopping = useCallback(
+    (topping: { item: string; price: number }) => {
+      let newToppings;
+      if (
+        selectedPizza.toppings.filter((data) => data.item === topping.item)
+          .length === 0
+      ) {
+        if (selectedPizza.toppings[0]?.item === '') {
+          newToppings = [topping];
+        } else {
+          newToppings = [...selectedPizza.toppings, topping];
+        }
       } else {
-        newToppings = [...selectedPizza.toppings, topping];
+        newToppings = selectedPizza.toppings.filter(
+          (data) => data.item !== topping.item
+        );
       }
-    } else {
-      newToppings = selectedPizza.toppings.filter(
-        (data) => data.item !== topping.item
-      );
-    }
-    setSelectedPizza({ ...selectedPizza, toppings: newToppings });
-  };
+      setSelectedPizza({ ...selectedPizza, toppings: newToppings });
+    },
+    [selectedPizza, setSelectedPizza]
+  );
 
   return (
     <motion.div

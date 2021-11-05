@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
@@ -22,9 +22,12 @@ const Base: FC = () => {
   const router = useRouter();
   const [selectedPizza, setSelectedPizza] = useAtom(pizzaAtom);
 
-  const addBase = (base: { item: string; price: number }) => {
-    setSelectedPizza({ ...selectedPizza, base });
-  };
+  const addBase = useCallback(
+    (base: { item: string; price: number }) => {
+      setSelectedPizza({ ...selectedPizza, base });
+    },
+    [selectedPizza, setSelectedPizza]
+  );
 
   return (
     <motion.div
