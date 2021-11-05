@@ -9,13 +9,10 @@ type Props = {
 const Loading: FC<Props> = ({ isLoading }) => {
   return (
     <>
-      {isLoading ? (
+      {isLoading && (
         <div className="loading">
-          {' '}
           <Loader />
         </div>
-      ) : (
-        <></>
       )}
     </>
   );
