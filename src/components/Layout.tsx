@@ -9,7 +9,13 @@ type Props = {
 
 const variants = {
   hidden: { opacity: 0, x: 0 },
-  visible: { opacity: 1, x: 0 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: 1.5,
+    },
+  },
   exit: {
     opacity: 0,
     x: -100,

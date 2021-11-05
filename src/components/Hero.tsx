@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { AiOutlineRight } from 'react-icons/ai';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-scroll';
 
 import {
   image,
@@ -80,16 +81,18 @@ const Hero: FC = () => {
         >
           {/* <button>Learn More</button> */}
           <button onClick={() => handleClick()}>Order now</button>
-          <motion.div
-            variants={learnMore}
-            whileHover="hover"
-            onClick={() => router.push('/')}
-          >
-            <p>Learn more</p>
-            <motion.div variants={arrow}>
-              <AiOutlineRight />
+          <Link to="about">
+            <motion.div
+              variants={learnMore}
+              whileHover="hover"
+              onClick={() => router.push('/')}
+            >
+              <p>Learn more</p>
+              <motion.div variants={arrow}>
+                <AiOutlineRight />
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </Link>
         </motion.div>
       </div>
       <motion.img
