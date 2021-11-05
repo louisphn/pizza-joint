@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { FaArrowLeft } from 'react-icons/fa';
 
 import { pizzaAtom } from '../contexts/pizzaContext';
+import { bases } from '../lib/data';
 import {
   containerVariants,
   backVariants,
@@ -25,13 +26,6 @@ const Base: FC = () => {
     setSelectedPizza({ ...selectedPizza, base });
   };
 
-  const bases = [
-    { item: 'Classic', price: 1000 },
-    { item: 'Thin & Crispy', price: 900 },
-    { item: 'Thick Crust', price: 1100 },
-  ];
-
-  console.log(selectedPizza);
   return (
     <motion.div
       className="base"

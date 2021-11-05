@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { FaArrowLeft } from 'react-icons/fa';
 
 import { pizzaAtom } from '../contexts/pizzaContext';
+import { toppings } from '../lib/data';
 import {
   containerVariants,
   backVariants,
@@ -40,15 +41,6 @@ const Toppings: FC = () => {
     }
     setSelectedPizza({ ...selectedPizza, toppings: newToppings });
   };
-
-  const toppings = [
-    { item: 'mushrooms', price: 200 },
-    { item: 'peppers', price: 50 },
-    { item: 'onions', price: 100 },
-    { item: 'olives', price: 150 },
-    { item: 'extra cheese', price: 300 },
-    { item: 'tomatoes', price: 250 },
-  ];
 
   return (
     <motion.div
