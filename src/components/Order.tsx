@@ -1,75 +1,97 @@
-import { FC, Dispatch, SetStateAction } from 'react';
+import React, { VFC, useState } from 'react';
 
 import { motion } from 'framer-motion';
+import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
+import toast, { Toaster } from 'react-hot-toast';
+import { FaArrowLeft } from 'react-icons/fa';
 
-import { orderContainerVariants, childVariants } from '../variants/variants';
+import { pizzaAtom } from '../contexts/pizzaContext';
+import { fetchPostJSON } from '../lib/helper';
+import getStripe from '../utils/get-stripejs';
+import { backVariants, arrowVariants } from '../variants/variants';
+import Loading from './Loading';
 
-const pathVariants = {
-  hidden: {
-    opacity: 0,
-    pathLength: 0,
-    fill: '#fff',
-    stroke: '#fff',
-    strokeWidth: 1,
-  },
-  visible: {
-    opacity: 1,
-    pathLength: 1,
-    fill: '#2cb67d',
-    stroke: '#2cb67d',
-    transition: {
-      default: { duration: 3, delay: 1.5, ease: 'easeInOut' },
-    },
-  },
-};
+const Order: VFC = () => {
+  const router = useRouter();
+  const [selectedPizza] = useAtom(pizzaAtom);
+  const [isLoading, setIsLoading] = useState(false);
 
-type Props = {
-  pizza: {
-    base: string;
-    toppings: string[];
+  const baseTotal = selectedPizza.base.price;
+  const toppingsPrice = selectedPizza.toppings.map((topping) => topping.price);
+  const toppingsTotal = toppingsPrice.reduce(
+    (prevValue, currValue) => prevValue + currValue,
+    0
+  );
+  const total = baseTotal + toppingsTotal;
+
+  const notify = () =>
+    toast.error('Oops! Something went wrong. Please try again in a moment.');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // Create a Checkout Session.
+    const response = await fetchPostJSON('/api/checkout', {
+      amount: total,
+    });
+
+    if (response.statusCode === 500) {
+      console.error(response.message);
+      notify();
+      setIsLoading(false);
+      return;
+    }
+
+    // Redirect to Checkout.
+    const stripe = await getStripe();
+    setIsLoading(false);
+    const { error } = await stripe!.redirectToCheckout({
+      // Make the id field from the Checkout Session creation API response
+      // available to this file, so you can provide it as parameter here
+      // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+      sessionId: response.id,
+    });
+    // If `redirectToCheckout` fails due to a browser or network
+    // error, display the localized error message to your customer
+    // using `error.message`.
+    console.warn(error.message);
+    notify();
   };
-  setShowModal: Dispatch<SetStateAction<boolean>>;
-};
 
-const Order: FC<Props> = ({ pizza, setShowModal }) => {
   return (
-    <motion.div
-      className="order"
-      variants={orderContainerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="56px"
-        viewBox="0 0 24 24"
-        width="56px"
-        fill="#000000"
-        className="success-svg"
-      >
-        <path d="M0 0h24v24H0V0z" fill="none" stroke="none" />
-        <motion.path
-          variants={pathVariants}
-          initial="hidden"
-          animate="visible"
-          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"
-        />
-      </svg>
-      <h2>Thank you for your order :)</h2>
-      <motion.p variants={childVariants}>
-        You ordered a {pizza.base} pizza with:
-      </motion.p>
-      <motion.ul variants={childVariants}>
-        <>
-          {pizza.toppings.map((topping) => (
-            <li key={topping}>{topping}</li>
-          ))}
-          <button onClick={() => setShowModal(true)}>
-            Order one more pizza?
-          </button>
-        </>
-      </motion.ul>
-    </motion.div>
+    <>
+      <Loading {...{ isLoading }} />
+      <Toaster />
+      <form className="order" onSubmit={(e) => handleSubmit(e)} method="POST">
+        <motion.div
+          onClick={() => router.push('/toppings')}
+          variants={backVariants}
+          whileHover="hover"
+          className="back"
+        >
+          <motion.div variants={arrowVariants}>
+            <FaArrowLeft />
+          </motion.div>
+          <motion.p variants={backVariants}>
+            Back to selecting pizza toppings
+          </motion.p>
+        </motion.div>
+        <div>
+          <p>
+            You have ordered a {selectedPizza.base.item} pizza with toppings:
+          </p>
+          <ul>
+            {selectedPizza.toppings &&
+              selectedPizza.toppings.map((topping) => (
+                <li key={topping.item}>{topping.item}</li>
+              ))}
+          </ul>
+          <p>Total: ¥{total}</p>
+        </div>
+        <button type="submit">Check out</button>
+      </form>
+    </>
   );
 };
 

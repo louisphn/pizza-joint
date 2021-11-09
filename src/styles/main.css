@@ -28,6 +28,7 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+  font-size: calc(60% + 0.8vmin);
 }
 
 /* reset & common styles */
@@ -51,10 +52,12 @@ div {
 }
 
 body {
+  font-size: 1rem;
   position: relative;
   max-width: 100vw;
   min-height: 100vh;
   background: #7f5af0;
+  cursor: default;
 }
 
 button {
@@ -70,17 +73,6 @@ button {
 }
 
 .logo {
-  cursor: pointer;
-}
-
-.container h3 {
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.container li {
-  padding: 10px;
   cursor: pointer;
 }
 
@@ -102,6 +94,7 @@ header {
   display: flex;
   padding: 40px;
   align-items: center;
+  pointer-events: none;
 }
 
 header .title {
@@ -118,6 +111,7 @@ header h1 {
 
 header .pizza-svg,
 .order .success-svg {
+  pointer-events: auto;
   width: 80px;
   overflow: visible;
   stroke: #fff;
@@ -125,6 +119,27 @@ header .pizza-svg,
   stroke-linejoin: round;
   stroke-linecap: round;
 }
+
+.order h2 {
+  margin-top: 32px;
+}
+
+.order p {
+  margin: 20px auto;
+}
+
+.order h2,
+.order p,
+.order li {
+  font-family: "Sora";
+  color: #fff;
+}
+
+.order button {
+  color: #fff;
+  border: 1px solid #fff;
+}
+
 
 .back {
   display: flex;
@@ -135,6 +150,7 @@ header .pizza-svg,
 
 .back p {
   margin-left: 12px;
+  color: #000;
 }
 
 /* pages */
@@ -149,7 +165,7 @@ header .pizza-svg,
 }
 
 .home h2 {
-  font-size: 2em;
+  font-size: 2rem;
   margin-bottom: 30px;
 }
 
@@ -159,10 +175,6 @@ header .pizza-svg,
   font-size: 1.6em;
   border: 3px solid #0d0d0d;
   margin: 30px 20px;
-}
-
-.order p {
-  margin: 20px auto;
 }
 
 /* modal */
@@ -229,11 +241,9 @@ header .pizza-svg,
   background-color: #fff;
 }
 
-.order h2 {
-  margin-top: 32px;
-}
 
 .next {
+  cursor: pointer;
   position: relative;
   overflow: hidden;
   width: 112px;
@@ -374,6 +384,8 @@ header .pizza-svg,
   width: 100vw;
   padding: 72px 0;
   background: #2cb67d;
+  display: flex;
+  justify-content: center;
 }
 
 .text_content {
@@ -387,6 +399,7 @@ header .pizza-svg,
 
 .introduction {
   text-align: center;
+  width: clamp(960px, 80%, 1440px);
 }
 
 .introduction h1 {
@@ -494,7 +507,7 @@ h3 {
 .base,
 .order {
   width: 100vw;
-  height: 100vh;
+  height: clamp(800px, 100vh, 100vh);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -513,7 +526,7 @@ li {
 }
 
 .base ul {
-  width: 212px;
+  width: 248px;
 }
 
 .base li {
@@ -528,18 +541,6 @@ li {
   top: -2px;
   margin-right: 8px;
   display: inline-block;
-}
-
-.order h2,
-.order p,
-.order li {
-  font-family: "Sora";
-  color: #fff;
-}
-
-.order button {
-  color: #fff;
-  border: 1px solid #fff;
 }
 
 .scroll-snap {

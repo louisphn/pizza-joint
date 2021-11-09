@@ -1,7 +1,11 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { VFC } from 'react';
 
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
+
+import { modalContext } from '../contexts/modalContext';
+import { initialState, pizzaAtom } from '../contexts/pizzaContext';
 
 const backdrop = {
   hidden: {
@@ -52,13 +56,10 @@ const buttonClose = {
   },
 };
 
-type Props = {
-  showModal: boolean;
-  setShowModal: Dispatch<SetStateAction<boolean>>;
-};
-
-const Modal: FC<Props> = ({ showModal, setShowModal }) => {
+const Modal: VFC = () => {
   const router = useRouter();
+  const [, setSelectedPizza] = useAtom(pizzaAtom);
+  const [showModal, setShowModal] = useAtom(modalContext);
 
   return (
     <AnimatePresence>
@@ -82,7 +83,10 @@ const Modal: FC<Props> = ({ showModal, setShowModal }) => {
               variants={buttonBack}
               initial="hidden"
               whileHover="hover"
-              onClick={() => router.push('/')}
+              onClick={() => {
+                setSelectedPizza(initialState);
+                router.push('/');
+              }}
             >
               Back to homepage
             </motion.button>

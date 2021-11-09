@@ -1,9 +1,12 @@
-import React, { FC } from 'react';
+import { FC, useCallback } from 'react';
 
 import { motion } from 'framer-motion';
+import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { FaArrowLeft } from 'react-icons/fa';
 
+import { pizzaAtom } from '../contexts/pizzaContext';
+import { toppings } from '../lib/data';
 import {
   containerVariants,
   backVariants,
@@ -15,25 +18,32 @@ import {
   listItemVariants,
 } from '../variants/variants';
 
-type Props = {
-  addTopping: (topping: string) => void;
-  pizza: {
-    base: string;
-    toppings: string[];
-  };
-};
-
-const Toppings: FC<Props> = ({ addTopping, pizza }) => {
+const Toppings: FC = () => {
   const router = useRouter();
 
-  const toppings = [
-    'mushrooms',
-    'peppers',
-    'onions',
-    'olives',
-    'extra cheese',
-    'tomatoes',
-  ];
+  const [selectedPizza, setSelectedPizza] = useAtom(pizzaAtom);
+
+  const addTopping = useCallback(
+    (topping: { item: string; price: number }) => {
+      let newToppings;
+      if (
+        selectedPizza.toppings.filter((data) => data.item === topping.item)
+          .length === 0
+      ) {
+        if (selectedPizza.toppings[0]?.item === '') {
+          newToppings = [topping];
+        } else {
+          newToppings = [...selectedPizza.toppings, topping];
+        }
+      } else {
+        newToppings = selectedPizza.toppings.filter(
+          (data) => data.item !== topping.item
+        );
+      }
+      setSelectedPizza({ ...selectedPizza, toppings: newToppings });
+    },
+    [selectedPizza, setSelectedPizza]
+  );
 
   return (
     <motion.div
@@ -44,7 +54,7 @@ const Toppings: FC<Props> = ({ addTopping, pizza }) => {
       exit="exit"
     >
       <motion.div
-        onClick={() => router.push('/base')}
+        onClick={() => router.push('/')}
         variants={backVariants}
         whileHover="hover"
         className="back"
@@ -52,17 +62,19 @@ const Toppings: FC<Props> = ({ addTopping, pizza }) => {
         <motion.div variants={arrowVariants}>
           <FaArrowLeft />
         </motion.div>
-        <motion.p variants={backVariants}>
-          Back to selecting pizza base
-        </motion.p>
+        <motion.p variants={backVariants}>Back to selecting base</motion.p>
       </motion.div>
       <h3>Step 2: Choose Toppings</h3>
       <ul>
         {toppings.map((topping) => {
-          const spanClass = pizza.toppings.includes(topping) ? 'active' : '';
+          const spanClass =
+            selectedPizza.toppings.filter((data) => data.item === topping.item)
+              .length > 0
+              ? 'active'
+              : '';
           return (
             <motion.li
-              key={topping}
+              key={topping.item}
               onClick={() => addTopping(topping)}
               variants={listItemVariants}
               whileHover="hover"
@@ -72,29 +84,34 @@ const Toppings: FC<Props> = ({ addTopping, pizza }) => {
                 variants={listItemVariants}
                 whileHover="hover"
                 animate={
-                  pizza.toppings.includes(topping) ? 'selected' : 'hidden'
+                  selectedPizza.toppings.filter(
+                    (data) => data.item === topping.item
+                  ).length > 0
+                    ? 'selected'
+                    : 'hidden'
                 }
               >
-                {topping}
+                {topping.item}
+                {selectedPizza.toppings.filter(
+                  (data) => data.item === topping.item
+                ).length > 0 && <span> ¥{topping.price}</span>}
               </motion.span>
             </motion.li>
           );
         })}
       </ul>
-      {pizza.toppings.length > 0 && (
-        <motion.div
-          className="next"
-          variants={nextVariants}
-          initial="hidden"
-          animate="visible"
-          whileHover="hover"
-          onClick={() => router.push('/order')}
-        >
-          <motion.span variants={nextColor}></motion.span>
-          <motion.span variants={nextButton}>&#8594;</motion.span>
-          <motion.button variants={buttonVariants}>Next</motion.button>
-        </motion.div>
-      )}
+      <motion.div
+        className="next"
+        variants={nextVariants}
+        initial="hidden"
+        animate={selectedPizza.toppings[0]?.item !== '' && 'visible'}
+        whileHover="hover"
+        onClick={() => router.push('/order')}
+      >
+        <motion.span variants={nextColor}></motion.span>
+        <motion.span variants={nextButton}>&#8594;</motion.span>
+        <motion.button variants={buttonVariants}>Next</motion.button>
+      </motion.div>
     </motion.div>
   );
 };

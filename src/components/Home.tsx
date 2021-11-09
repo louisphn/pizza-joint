@@ -16,7 +16,7 @@ const Home: FC = () => {
       animate="visible"
     >
       <Hero />
-      <div className="about">
+      <div className="about" id="about">
         <TextContent />
       </div>
       <LandingConclusion />

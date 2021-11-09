@@ -1,9 +1,12 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 
 import { motion } from 'framer-motion';
+import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { FaArrowLeft } from 'react-icons/fa';
 
+import { pizzaAtom } from '../contexts/pizzaContext';
+import { bases } from '../lib/data';
 import {
   containerVariants,
   backVariants,
@@ -15,18 +18,16 @@ import {
   listItemVariants,
 } from '../variants/variants';
 
-type Props = {
-  addBase: (base: string) => void;
-  pizza: {
-    base: string;
-    toppings: string[];
-  };
-};
-
-const Base: FC<Props> = ({ addBase, pizza }) => {
+const Base: FC = () => {
   const router = useRouter();
+  const [selectedPizza, setSelectedPizza] = useAtom(pizzaAtom);
 
-  const bases = ['Classic', 'Thin & Crispy', 'Thick Crust'];
+  const addBase = useCallback(
+    (base: { item: string; price: number }) => {
+      setSelectedPizza({ ...selectedPizza, base });
+    },
+    [selectedPizza, setSelectedPizza]
+  );
 
   return (
     <motion.div
@@ -50,10 +51,11 @@ const Base: FC<Props> = ({ addBase, pizza }) => {
       <h3>Step 1: Choose Your Base</h3>
       <ul>
         {bases.map((base) => {
-          const spanClass = pizza.base === base ? 'active' : '';
+          const spanClass =
+            selectedPizza.base.item === base.item ? 'active' : '';
           return (
             <motion.li
-              key={base}
+              key={base.item}
               onClick={() => addBase(base)}
               variants={listItemVariants}
               whileHover="hover"
@@ -63,29 +65,33 @@ const Base: FC<Props> = ({ addBase, pizza }) => {
                 variants={listItemVariants}
                 whileHover="hover"
                 initial="hidden"
-                animate={pizza.base === base ? 'selected' : 'hidden'}
+                animate={
+                  selectedPizza.base.item === base.item ? 'selected' : 'hidden'
+                }
                 transition={{ duration: 0.6 }}
               >
-                {base}
+                {base.item}
+                {selectedPizza.base.item === base.item && (
+                  <span> ¥{base.price}</span>
+                )}
               </motion.span>
             </motion.li>
           );
         })}
       </ul>
 
-      {pizza.base && (
-        <motion.div
-          className="next"
-          variants={nextVariants}
-          initial="hidden"
-          whileHover="hover"
-          onClick={() => router.push('/toppings')}
-        >
-          <motion.span variants={nextColor}></motion.span>
-          <motion.span variants={nextButton}>&#8594;</motion.span>
-          <motion.button variants={buttonVariants}>Next</motion.button>
-        </motion.div>
-      )}
+      <motion.div
+        className="next"
+        variants={nextVariants}
+        initial="hidden"
+        animate={selectedPizza.base.item !== '' && 'visible'}
+        whileHover="hover"
+        onClick={() => router.push('/toppings')}
+      >
+        <motion.span variants={nextColor}></motion.span>
+        <motion.span variants={nextButton}>&#8594;</motion.span>
+        <motion.button variants={buttonVariants}>Next</motion.button>
+      </motion.div>
     </motion.div>
   );
 };
