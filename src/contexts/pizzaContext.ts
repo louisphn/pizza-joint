@@ -25,3 +25,8 @@ export const initialState: Pizza = {
 };
 
 export const pizzaAtom = atomWithStorage<Pizza>('selectedPizza', initialState);
+export const pizzaImage = atomWithStorage<string>('selectedPizzaImage', '');
+export const toppingImages = atomWithStorage<string[]>(
+  'selectedToppingImages',
+  []
+);
