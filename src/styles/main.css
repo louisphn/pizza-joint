@@ -571,9 +571,14 @@ li {
 }
 
 .pizza-image_container {
-  width: 212px;
-  height: 212px;
+  width: 360px;
+  height: 360px;
   position: relative;
+}
+
+.pizza-image_container span {
+  width: 100%!important;
+  height: 100%!important;
 }
 
 .topping_image {
@@ -581,20 +586,21 @@ li {
   position: absolute;
   width: 96px;
   height: 96px;
+  animation: animating 2s forwards infinite linear;
 }
 
 .topping_image:first-child {
-  top: 56px;
-  left: 0;
+  top: 96px;
+  left: 24px;
 }
 
 .topping_image:nth-child(2) {
-  top: 24px;
-  left: 50%;
+  top: 48px;
+  left: 35%;
   transform: translateX(-50%);
 }
 
 .topping_image:nth-child(3) {
-  top: 56px;
+  top: 96px;
   right: 24px;
 }

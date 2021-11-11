@@ -145,6 +145,7 @@ const Toppings: FC = () => {
           </AnimatePresence>
           {selectedBase && (
             <Image
+              className={'pizza-base-image'}
               src={selectedBase}
               width={240}
               height={240}

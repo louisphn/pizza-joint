@@ -110,7 +110,7 @@ export const buttonVariants = {
     scale: 1,
     transition: {
       duration: 1.5,
-      yoyo: Infinity,
+      repeat: Infinity,
     },
   },
 };
