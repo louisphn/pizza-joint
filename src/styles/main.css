@@ -584,14 +584,13 @@ li {
 .topping_image {
   z-index: 2;
   position: absolute;
-  width: 96px;
-  height: 96px;
+  width: 228px;
+  height: 228px;
   animation: animating 2s forwards infinite linear;
 }
 
 .topping_image:first-child {
-  top: 96px;
-  left: 24px;
+  top: 72px;
 }
 
 .topping_image:nth-child(2) {
@@ -601,6 +600,6 @@ li {
 }
 
 .topping_image:nth-child(3) {
-  top: 96px;
-  right: 24px;
+  top: 64px;
+  right: 16px;
 }

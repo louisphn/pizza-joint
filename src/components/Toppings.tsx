@@ -29,12 +29,12 @@ const Toppings: FC = () => {
     useAtom(toppingImages);
 
   const convertImage = {
-    mushrooms: '/mushrooms.svg',
-    peppers: '/peppers.svg',
-    onions: '/onions.svg',
-    olives: '/olives.svg',
-    'extra cheese': '/cheese.svg',
-    tomatoes: '/tomatoes.svg',
+    mushrooms: '/mushroom.png',
+    peppers: '/paprika.png',
+    onions: '/onion.png',
+    olives: '/olive.png',
+    salami: '/salami.png',
+    tomatoes: '/tomato.png',
   };
 
   const checkTopping = useCallback(
@@ -152,6 +152,9 @@ const Toppings: FC = () => {
               alt={'baseImage'}
             />
           )}
+          <p className="text-center text-white text-xl transform translate-y-[-42px]">
+            {selectedPizza.base.item} Base
+          </p>
         </div>
 
         <motion.div
