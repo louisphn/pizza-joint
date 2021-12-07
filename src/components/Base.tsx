@@ -1,11 +1,12 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useAtom } from 'jotai';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FaArrowLeft } from 'react-icons/fa';
 
-import { pizzaAtom } from '../contexts/pizzaContext';
+import { pizzaAtom, pizzaImage } from '../contexts/pizzaContext';
 import { bases } from '../lib/data';
 import {
   containerVariants,
@@ -21,6 +22,21 @@ import {
 const Base: FC = () => {
   const router = useRouter();
   const [selectedPizza, setSelectedPizza] = useAtom(pizzaAtom);
+  const [baseImage, setBaseImage] = useAtom(pizzaImage);
+
+  const getCurrentImage = (selctedBase: string): string => {
+    const image = {
+      classic: '/pizza-1.svg',
+      'thin & crispy': '/pizza_base_crispy.png',
+      'thick crust': '/pizza_base.png',
+    };
+    return image[selctedBase.toLowerCase()] ?? '';
+  };
+
+  useEffect(() => {
+    const currentImage = getCurrentImage(selectedPizza.base.item);
+    setBaseImage(currentImage);
+  }, [selectedPizza]);
 
   const addBase = useCallback(
     (base: { item: string; price: number }) => {
@@ -49,6 +65,25 @@ const Base: FC = () => {
         <motion.p variants={backVariants}>Back to top</motion.p>
       </motion.div>
       <h3>Step 1: Choose Your Base</h3>
+      <AnimatePresence exitBeforeEnter>
+        {baseImage && (
+          <motion.div
+            className={'base-image'}
+            key={baseImage}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{
+              x: -100,
+              opacity: 0,
+              transition: {
+                type: 'linear',
+              },
+            }}
+          >
+            <Image src={baseImage} width={240} height={240} alt={'baseImage'} />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <ul>
         {bases.map((base) => {
           const spanClass =

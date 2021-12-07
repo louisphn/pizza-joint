@@ -8,7 +8,7 @@ const LandingConclusion = () => {
   const [ref, inView] = useInView();
 
   return (
-    <div ref={ref} className="landing_conclusion">
+    <section ref={ref} className="landing_conclusion">
       <motion.h2
         variants={section}
         initial={'hidden'}
@@ -45,7 +45,7 @@ const LandingConclusion = () => {
           ],
         }}
       />
-    </div>
+    </section>
   );
 };
 

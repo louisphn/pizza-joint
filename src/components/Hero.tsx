@@ -37,7 +37,7 @@ const Hero: FC = () => {
   };
 
   return (
-    <div className="hero">
+    <section className="hero">
       <Loading isLoading={loading} />
       <div className="content">
         <motion.h2
@@ -104,7 +104,7 @@ const Hero: FC = () => {
         width="480"
         height="480"
       />
-    </div>
+    </section>
   );
 };
 

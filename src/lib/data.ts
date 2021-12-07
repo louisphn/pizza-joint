@@ -9,6 +9,6 @@ export const toppings = [
   { item: 'peppers', price: 50 },
   { item: 'onions', price: 100 },
   { item: 'olives', price: 150 },
-  { item: 'extra cheese', price: 300 },
+  { item: 'salami', price: 200 },
   { item: 'tomatoes', price: 250 },
 ];
