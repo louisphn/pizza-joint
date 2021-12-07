@@ -518,6 +518,7 @@ h3 {
 
 .base,
 .order {
+  position: relative;
   width: 100vw;
   height: clamp(800px, 100vh, 100vh);
   display: flex;
@@ -555,19 +556,42 @@ li {
   display: inline-block;
 }
 
-.scroll-snap {
-  scroll-snap-type: y mandatory;
-}
-
 .toppings_container {
   display: flex;
   align-items: center;
-  position: relative;
 }
 
 .toppings_container ul {
   position: absolute;
   right: 8rem;
+}
+
+.topping__loading_image {
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+  overflow:hidden;
+  display: none;
+}
+
+.topping__loading_active {
+  position: fixed;
+  top: 0;
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  align-items: center;
+}
+
+.topping__loading_image img {
+  width: 320px;
+  height: 320px;
+  object-fit: cover;
+}
+
+.topping__loading_image img[src=""] {
+ display: none;
+
 }
 
 .pizza-image_container {

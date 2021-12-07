@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useState, useEffect } from 'react';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAtom } from 'jotai';
@@ -27,6 +27,7 @@ const Toppings: FC = () => {
   const [selectedBase] = useAtom(pizzaImage);
   const [selectedToppingImages, setSelectedToppingImages] =
     useAtom(toppingImages);
+  const [isLoading, setIsLoading] = useState(true);
 
   const convertImage = {
     mushrooms: '/mushroom.png',
@@ -36,6 +37,12 @@ const Toppings: FC = () => {
     salami: '/salami.png',
     tomatoes: '/tomato.png',
   };
+
+  useEffect(() => {
+    if (isLoading) {
+      setTimeout(() => setIsLoading(false), 1000);
+    }
+  }, [isLoading]);
 
   const checkTopping = useCallback(
     (topping: string) => {
@@ -50,6 +57,7 @@ const Toppings: FC = () => {
   const addTopping = useCallback(
     (topping: { item: string; price: number }) => {
       let newToppings;
+      setIsLoading(true);
       // if topping has not been added yet
       if (!checkTopping(topping.item)) {
         // and current selected toppings are less than 3
@@ -63,6 +71,7 @@ const Toppings: FC = () => {
           }
           // if current selected toppings are full (= 3) => alert
         } else {
+          setIsLoading(false);
           toast.error('You can only select up to 3 toppings', {
             duration: 4000,
             icon: '❌',
@@ -97,6 +106,15 @@ const Toppings: FC = () => {
       animate="visible"
       exit="exit"
     >
+      {selectedPizza.toppings.length <= 3 && (
+        <div
+          className={`topping__loading_image ${
+            isLoading && 'topping__loading_active'
+          } `}
+        >
+          <img src={isLoading ? '/loading.gif' : ''} width={640} height={640} />
+        </div>
+      )}
       <div className="base">
         <Toaster />
         <motion.div
@@ -129,6 +147,7 @@ const Toppings: FC = () => {
                     y: 0,
                     opacity: 1,
                     transition: {
+                      delay: 1,
                       type: 'spring',
                       damping: 8,
                     },
